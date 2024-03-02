@@ -7,20 +7,27 @@
 
   const navigate = (page) => {
     currentPage = page;
+    // Update the browser's history to reflect the current page
+    history.pushState({}, '', page === 'home' ? 'DSC_160_Final_Project/' : `DSC_160_Final_Project/${page}`);
   };
 
   const goToPreviousPage = () => {
     if (currentPage === 'home') return; 
     else if (currentPage === 'page1') currentPage = 'home'; 
     else if (currentPage === 'page2') currentPage = 'page1'; 
+    // Update the browser's history when navigating to the previous page
+    history.pushState({}, '', currentPage === 'page1' ? 'DSC_160_Final_Project/' : 'DSC_160_Final_Project/page1');
   };
 
   const goToNextPage = () => {
     if (currentPage === 'home') currentPage = 'page1';
     else if (currentPage === 'page1') currentPage = 'page2'; 
     else if (currentPage === 'page2') return; 
+    // Update the browser's history when navigating to the next page
+    history.pushState({}, '', currentPage === 'home' ? 'DSC_160_Final_Project/page1' : 'DSC_160_Final_Project/page2');
   };
 </script>
+
 
 <style>
   @font-face {
@@ -91,9 +98,9 @@
 
 <nav>
   <ul>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
+    <li><a href="DSC_160_Final_Project/" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
+    <li><a href="DSC_160_Final_Project/page1" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
+    <li><a href="DSC_160_Final_Project/page2" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
     <!-- Add more pages as needed -->
   </ul>
 </nav>
@@ -101,7 +108,6 @@
 {#if currentPage === 'home'}
   <Home />
 {:else if currentPage === 'page1'}
-  console.log('currentPage:', currentPage);
   <Page1 />
 {:else if currentPage === 'page2'}
   <Page2 />
