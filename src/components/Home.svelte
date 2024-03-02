@@ -31,9 +31,12 @@
         
         <p1>Writeup</p1><br>
         <p1>This is a prototype, future steps will describe the dynamic system, P-controller, PI-controller, PD-controller, and then PID-controller as well as demonstrating its robustness to noise</p1><br>
-        <p1>So far we have thought about how we can structure a fun and engaging visual explanation of how one of our favorite controllers from control theory works</p1><br>
+        <p1>So far we have thought about how we can structure a fun and engaging visual explanation of how one of our favorite controllers from control theory works.</p1><br>
         <p1>We landed on creating an interactive example of cruise control on a car as PID is widely used for this, and it is an understandable entry level example for non-control system engineers</p1><br>
+        <p1>So far we have made a working prototype where a user can interact with the PID controller by adjusting gains to the controller.</p1><br>
+        <p1>Also a model of the car is shown and a set up for the rest of the project with connecting pages through buttons.</p1><br>
         <p1>The most challening part will be to create an interactive visualisation of the car model (page1). Also describing the robostness to noise can be somewhat challenging to visualize</p1><br>
+        <p1> This will be done by interacing with the equations with the mouse. Also describing the robostness to noise can be somewhat challenging to visualize. We are thinking of letting the user adding a hill to the simulations to make it realistic. </p1>
 
     </div><br>
     <img src = "https://www.thorlabs.com/images/TabImages/PID2.jpg" alt = "PID controller" width = "800" height = "300">
