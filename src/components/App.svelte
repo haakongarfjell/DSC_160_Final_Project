@@ -101,6 +101,7 @@
 {#if currentPage === 'home'}
   <Home />
 {:else if currentPage === 'page1'}
+  console.log('currentPage:', currentPage);
   <Page1 />
 {:else if currentPage === 'page2'}
   <Page2 />
