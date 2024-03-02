@@ -2,12 +2,12 @@
   import Home from './Home.svelte';
   import Page1 from './Page1.svelte';
   import Page2 from './Page2.svelte';
-  import { onMount } from 'svelte';
 
   let currentPage = 'home';
 
   const navigate = (page) => {
     currentPage = page;
+    console.log(currentPage);
   };
 
   const goToPreviousPage = () => {
@@ -21,39 +21,6 @@
     else if (currentPage === 'page1') currentPage = 'page2'; 
     else if (currentPage === 'page2') return; 
   };
-
-  // Run the reactive block on every navigation change
-  $: {
-    // This block will be executed every time currentPage changes
-    // It will re-evaluate which component to render based on the currentPage value
-    if (currentPage === 'home') {
-      // Load the Home component
-      component = Home;
-    } else if (currentPage === 'page1') {
-      // Load the Page1 component
-      component = Page1;
-    } else if (currentPage === 'page2') {
-      // Load the Page2 component
-      component = Page2;
-    } else {
-      // Load a fallback component when currentPage is not recognized
-      component = NotFound;
-    }
-  }
-
-  let component; // This will hold the dynamically loaded component
-
-  const NotFound = () => {
-    return {
-      // Render the 'Page not found' message
-      render: () => `<p>Page not found</p>`
-    };
-  };
-
-  // Execute the navigation logic when the component mounts
-  onMount(() => {
-    navigate(currentPage); // Ensure the initial page is loaded
-  });
 </script>
 
 <style>
@@ -122,25 +89,25 @@
   }
 </style>  
 
+
 <nav>
   <ul>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
-    <li><a href="DSC_160_Final_Project/#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
+    <li><a href="DSC_160_Final_Project/" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
+    <li><a href="DSC_160_Final_Project/" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
+    <li><a href="DSC_160_Final_Project/" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
     <!-- Add more pages as needed -->
   </ul>
 </nav>
 
-{#await component}
-  <!-- Render a loading indicator here if needed -->
-  <p>Loading...</p>
-{:then loadedComponent}
-  <!-- Render the dynamically loaded component -->
-  <svelte:component this={loadedComponent} />
-{:catch error}
-  <!-- Render an error message if there's an issue loading the component -->
-  <p>Error: {error.message}</p>
-{/await}
+{#if currentPage === 'home'}
+  <Home />
+{:else if currentPage === 'page1'}
+  <Page1 />
+{:else if currentPage === 'page2'}
+  <Page2 />
+{:else}
+  <p>Page not found</p>
+{/if}
 
 <div class="arrow-container">
   <div class="arrow" on:click={goToPreviousPage}>←</div>
