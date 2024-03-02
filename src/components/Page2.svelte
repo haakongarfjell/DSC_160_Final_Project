@@ -306,7 +306,7 @@
     <input type="range" id="setpoint_velocity" name="setpoint_velocity" min="0" max="100" step="1" bind:value={setpoint_velocity} on:input={updateParameters}>
     <span>{setpoint_velocity}</span>
 
-    <label for="control_on_time" style="margin-left: 20px;">Cruis Control On:</label>
+    <label for="control_on_time" style="margin-left: 20px;">Cruise Control On:</label>
     <input type="range" id="control_on_time" name="control_on_time" min="10" max="90" step="1" bind:value={control_on_time} on:input={updateParameters}>
     <span>{control_on_time}</span>
 </div>
