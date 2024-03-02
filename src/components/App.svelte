@@ -5,21 +5,15 @@
 
   let currentPage = 'home';
 
-  const navigate = (page) => {
-    currentPage = page;
-    console.log(currentPage);
-  };
+  const routes = [
+    { name: 'Home', path: '/', component: Home },
+    { name: 'Page 1', path: '/page1', component: Page1 },
+    { name: 'Page 2', path: '/page2', component: Page2 }
+  ];
 
-  const goToPreviousPage = () => {
-    if (currentPage === 'home') return; 
-    else if (currentPage === 'page1') currentPage = 'home'; 
-    else if (currentPage === 'page2') currentPage = 'page1'; 
-  };
-
-  const goToNextPage = () => {
-    if (currentPage === 'home') currentPage = 'page1';
-    else if (currentPage === 'page1') currentPage = 'page2'; 
-    else if (currentPage === 'page2') return; 
+  const navigate = (path) => {
+    currentPage = path;
+    window.history.pushState({}, '', path);
   };
 </script>
 
@@ -88,28 +82,22 @@
     cursor: pointer;
   }
 </style>  
-
-
 <nav>
   <ul>
-    <li><a href="#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
-    <!-- Add more pages as needed -->
+    {#each routes as route}
+      <li><a href={route.path} class="nav-link" class:active={currentPage === route.path} on:click|preventDefault={() => navigate(route.path)}>{route.name}</a></li>
+    {/each}
   </ul>
 </nav>
 
-{#if currentPage === 'home'}
-  <Home />
-{:else if currentPage === 'page1'}
-  <Page1 />
-{:else if currentPage === 'page2'}
-  <Page2 />
-{:else}
-  <p>Page not found</p>
-{/if}
+{#each routes as { path, component }}
+  {#if currentPage === path}
+    <svelte:component this={component} />
+  {/if}
+{/each}
 
 <div class="arrow-container">
-  <div class="arrow" on:click={goToPreviousPage}>←</div>
-  <div class="arrow" on:click={goToNextPage}>→</div>
+  <a href="/">← Home</a>
+  <a href="/page1">Page 1 →</a>
+  <a href="/page2">Page 2 →</a>
 </div>
