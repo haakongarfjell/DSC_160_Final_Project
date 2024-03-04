@@ -2,6 +2,9 @@
   import Home from './Home.svelte';
   import Page1 from './Page1.svelte';
   import Page2 from './Page2.svelte';
+  import Page3 from './Page3.svelte';
+  import Page4 from './Page4.svelte';
+  import Page5 from './Page5.svelte';
 
   let currentPage = 'home';
 
@@ -14,12 +17,18 @@
     if (currentPage === 'home') return; 
     else if (currentPage === 'page1') currentPage = 'home'; 
     else if (currentPage === 'page2') currentPage = 'page1'; 
+    else if (currentPage === 'page3') currentPage = 'page2';
+    else if (currentPage === 'page4') currentPage = 'page3';
+    else if (currentPage === 'page5') currentPage = 'page4';
   };
 
   const goToNextPage = () => {
     if (currentPage === 'home') currentPage = 'page1';
     else if (currentPage === 'page1') currentPage = 'page2'; 
-    else if (currentPage === 'page2') return; 
+    else if (currentPage === 'page2') currentPage = 'page3'; 
+    else if (currentPage === 'page3') currentPage = 'page4'; 
+    else if (currentPage === 'page4') currentPage = 'page5'; 
+    else if (currentPage === 'page5') return;
   };
 </script>
 
@@ -95,7 +104,9 @@
     <li><a href="#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
-    <!-- Add more pages as needed -->
+    <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>Page 3</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>Page 4</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>Page 5</a></li>
   </ul>
 </nav>
 
@@ -105,6 +116,12 @@
   <Page1 />
 {:else if currentPage === 'page2'}
   <Page2 />
+{:else if currentPage === 'page3'}
+  <Page3 />
+{:else if currentPage === 'page4'}
+  <Page4 />
+{:else if currentPage === 'page5'}
+  <Page5 />
 {:else}
   <p>Page not found</p>
 {/if}
