@@ -309,7 +309,7 @@
 <!-- Slider for adjusting Ki parameter -->
 <div style="text-align: center; margin-top: 20px;">
     <label for="Ki">Ki:</label>
-    <input type="range" id="Ki" name="Ki" min="0" max="1" step="0.001" bind:value={Ki} on:input={updateKi}>
+    <input type="range" id="Ki" name="Ki" min="0" max="0.5" step="0.005" bind:value={Ki} on:input={updateKi}>
     <span>{Ki}</span>
 </div>
 
