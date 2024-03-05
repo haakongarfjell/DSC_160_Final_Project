@@ -1,312 +1,231 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    
-    // Define simulation parameters
-    let initial_velocity = 100;
-    let setpoint_velocity = 20;
-    let control_on_time = 50;
-    let Kd = 0.01;
-    let Kp = 0.1;
-    let Ki = 1;
-    
-    // Define PID controller function
-    function PID_controller(K, current_velocity, setpoint_velocity, errors) {
-        const [Kp, Ki, Kd] = K;
-    
-        const error = setpoint_velocity - current_velocity;
-    
-        const P = Kp * error;
-        const I = Ki * errors.reduce((acc, curr) => acc + curr, 0);
-        const D = Kd * (error - errors[errors.length - 1]);
-    
-        const control_signal = P + I + D;
-        return [control_signal, error];
-    }
-    
-    // Define the differential equation of the system
-    function dv_dt(current_velocity, control_signal) {
-        const mass = 100;  // Mass of car in kg
-        const friction_coefficient = 20;  // Friction coefficient in Ns/m
-        const acceleration = (control_signal - friction_coefficient * current_velocity) / mass;
-        return acceleration;
-    }
-    
-    // Euler method for numerical integration
-    function simulate(initial_velocity, setpoint_velocity, control_on_time, K) {
-        const initial_time = 0;
-        const final_time = 100;
-        const dt = 0.1;  // time step
-        const time = [];
-        const velocity = [];
-        const errors = [0];
-        let control_signal = 0;
-        let current_velocity = initial_velocity;
-        let error; // Declare error variable here
-    
-        // Euler integration
-        for (let t = initial_time; t <= final_time; t += dt) {
-          time.push(t);
-          if (t > control_on_time) {
-            [control_signal, error] = PID_controller(K, current_velocity, setpoint_velocity, errors);
-            errors.push(error);
-          }
-          velocity.push(current_velocity);
-          const acceleration = dv_dt(current_velocity, control_signal);
-          current_velocity += acceleration * dt;
-        }
-        return [velocity, time];
-    }
-    
-    // Function to plot the simulation data using D3
-    function plotData() {
-      const margin = { top: 50, right: 100, bottom: 70, left: 70 };
-      const width = 800 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
-    
-      const svg = d3.select('#plot')
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-    
-      const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
-      const y = d3.scaleLinear().domain([0, d3.max(simulationData[0])]).nice().range([height, 0]);
-    
-      const line = d3.line()
-        .x((d, i) => x(simulationData[1][i]))
-        .y(d => y(d));
-    
-      // Append the title
-      svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", -20)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("font-weight", "bold")
-        .style("font-family", "Arial, sans-serif")
-        .style("fill", "black")
-        .style("text-transform", "capitalize")
-        .text("Cruise Control by Using PID controller");
-    
-      // Append the line for simulation data
-      svg.append('path')
-        .datum(simulationData[0])
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 3) // Adjust line size
-        .attr('d', line);
-    
-      // Append the green horizontal dotted line for setpoint_velocity
-      svg.append('line')
-        .attr('x1', 0)
-        .attr('x2', width)
-        .attr('y1', y(setpoint_velocity))
-        .attr('y2', y(setpoint_velocity))
-        .attr('stroke', 'green')
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', '5,5');
-    
-      // Append the vertical red dotted line for control_on_time
-      svg.append('line')
-        .attr('x1', x(control_on_time))
-        .attr('x2', x(control_on_time))
-        .attr('y1', 0)
-        .attr('y2', height)
-        .attr('stroke', 'red')
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', '5,5');
-    
-      // Define legends data
-      const legends = [
-        { label: "Car Speed", color: "steelblue" , dasharray: "1,0"},
-        { label: "Setpoint Velocity", color: "green", dasharray: "5,5" },
-        { label: "Cruise Control ON", color: "red", dasharray: "5,5" }
-      ];
-    
-      // Append legends
-      svg.selectAll(".legend")
-        .data(legends)
-        .enter()
-        .append("text")
-        .attr("x", width - 125)
-        .attr("y", (d, i) => 25 + i * 20)
-        .attr("text-anchor", "start")
-        .text(d => d.label)
-        .attr("alignment-baseline", "middle")
-        .attr("font-size", "16px")
-        .attr("fill", d => d.color);
-    
-      // Append lines for legends
-      svg.selectAll(".legend-line")
-        .data(legends)
-        .enter()
-        .append("line")
-        .attr("x1", width - 150 + 2)
-        .attr("y1", (d, i) => 24 + i * 20)
-        .attr("x2", width - 130)
-        .attr("y2", (d, i) => 24 + i * 20)
-        .attr("stroke", d => d.color)
-        .attr("stroke-width", 2)
-        .attr("stroke-dasharray", d => d.dasharray || "1,0");
-    
-      // Append X axis
-      svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
-        .append("text")
-        .attr("x", width / 2)
-        .attr("y", 20)
-        .attr("dy", "1em")
-        .attr("text-anchor", "middle")
-        .text("Time (s)")
-        .style("fill", "black")
-        .style("font-size", "16px"); // Adjust axis label size
-        
-      // Append Y axis
-      svg.append("g")
-        .call(d3.axisLeft(y))
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -margin.left + 10)
-        .attr("x", -height / 2)
-        .attr("dy", "1em")
-        .attr("text-anchor", "middle")
-        .text("Velocity (m/s)")
-        .style("fill", "black")
-        .style("font-size", "16px"); // Adjust axis label size
-    
-      // Add gridlines
-      svg.append("g")
-        .attr("class", "grid")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSize(-height).tickFormat(""))
-        .selectAll(".tick")
-        .classed("minor", d => d % 10 !== 0)
-        .selectAll("line")
-        .style("stroke-opacity", 0.2);
-    
-      svg.append("g")
-        .attr("class", "grid")
-        .call(d3.axisLeft(y).tickSize(-width).tickFormat(""))
-        .selectAll(".tick")
-        .classed("minor", d => d % 10 !== 0)
-        .selectAll("line")
-        .style("stroke-opacity", 0.2);
-    }
-   
-    // Function to update simulation data with new Ki value
-    function updateParameters() {
-        simulationData = simulate(initial_velocity, setpoint_velocity, control_on_time, [Kp, Ki, Kd]);
-        d3.select('#plot').select('svg').remove();
-        plotData();
-    }
-
-    function updateKp(event) {
-        Kp = +event.target.value; 
-        updateParameters();
-    }
-
-    function updateKi(event) {
-        Ki = +event.target.value; 
-        updateParameters();
-    }
-
-    function updateKd(event) {
-        Kd = +event.target.value; 
-        updateParameters();
-    }
-    
-    // Define simulation data
-    let simulationData = [[], []];
+  
+    let svg;
+  
     onMount(() => {
-        simulationData = simulate(initial_velocity, setpoint_velocity, control_on_time, [Kp, Ki, Kd]);
-        plotData();
+      const width = 800; // Adjust width as needed
+      const height = 400; // Adjust height as needed
+  
+      // Create SVG element
+      svg = d3.select('svg')
+        .attr('width', width)
+        .attr('height', height);
+  
+      // Reference block
+      const referenceX = 50;
+      const referenceY = height / 2;
+      const referenceWidth = 100;
+      const referenceHeight = 50;
+      svg.append('rect')
+        .attr('x', referenceX)
+        .attr('y', referenceY - referenceHeight / 2)
+        .attr('width', referenceWidth)
+        .attr('height', referenceHeight)
+        .attr('fill', 'lightblue')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', referenceX + referenceWidth / 2)
+        .attr('y', referenceY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('Reference');
+  
+      // Error block
+      const errorX = referenceX + referenceWidth;
+      const errorY = height / 2;
+      const errorWidth = 100;
+      const errorHeight = 50;
+      svg.append('rect')
+        .attr('x', errorX)
+        .attr('y', errorY - errorHeight / 2)
+        .attr('width', errorWidth)
+        .attr('height', errorHeight)
+        .attr('fill', 'lightblue')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', errorX + errorWidth / 2)
+        .attr('y', errorY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('Error');
+  
+      // P block
+      const pX = errorX + errorWidth + 50;
+      const pY = errorY - 50;
+      const pWidth = 100;
+      const pHeight = 50;
+      svg.append('rect')
+        .attr('x', pX)
+        .attr('y', pY)
+        .attr('width', pWidth)
+        .attr('height', pHeight)
+        .attr('fill', 'lightgreen')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', pX + pWidth / 2)
+        .attr('y', pY + pHeight / 2)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('P');
+  
+      // I block
+      const iX = errorX + errorWidth + 50;
+      const iY = errorY;
+      const iWidth = 100;
+      const iHeight = 50;
+      svg.append('rect')
+        .attr('x', iX)
+        .attr('y', iY - iHeight / 2)
+        .attr('width', iWidth)
+        .attr('height', iHeight)
+        .attr('fill', 'lightgreen')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', iX + iWidth / 2)
+        .attr('y', iY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('I');
+  
+      // D block
+      const dX = errorX + errorWidth + 50;
+      const dY = errorY + 50;
+      const dWidth = 100;
+      const dHeight = 50;
+      svg.append('rect')
+        .attr('x', dX)
+        .attr('y', dY - dHeight / 2)
+        .attr('width', dWidth)
+        .attr('height', dHeight)
+        .attr('fill', 'lightgreen')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', dX + dWidth / 2)
+        .attr('y', dY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('D');
+      
+      // Sum block
+      const sumX = pX + pWidth + 100;
+      const sumY = height / 2;
+      const sumWidth = 100;
+      const sumHeight = 50;
+      svg.append('rect')
+        .attr('x', sumX)
+        .attr('y', sumY - sumHeight / 2)
+        .attr('width', sumWidth)
+        .attr('height', sumHeight)
+        .attr('fill', 'lightblue')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', sumX + sumWidth / 2)
+        .attr('y', sumY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('Sum');
+  
+      // System block
+      const systemX = sumX + sumWidth + 100;
+      const systemY = height / 2;
+      const systemWidth = 100;
+      const systemHeight = 50;
+      svg.append('rect')
+        .attr('x', systemX)
+        .attr('y', systemY - systemHeight / 2)
+        .attr('width', systemWidth)
+        .attr('height', systemHeight)
+        .attr('fill', 'lightblue')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('text')
+        .attr('x', systemX + systemWidth / 2)
+        .attr('y', systemY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('System');
+      
+      // Arrows
+      svg.append('line')
+        .attr('x1', referenceX + referenceWidth)
+        .attr('y1', referenceY)
+        .attr('x2', errorX)
+        .attr('y2', errorY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', errorX + errorWidth)
+        .attr('y1', errorY)
+        .attr('x2', pX)
+        .attr('y2', pY + pHeight / 2)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', errorX + errorWidth)
+        .attr('y1', errorY)
+        .attr('x2', iX)
+        .attr('y2', iY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', errorX + errorWidth)
+        .attr('y1', errorY)
+        .attr('x2', dX)
+        .attr('y2', dY - dHeight / 2)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', pX + pWidth)
+        .attr('y1', pY + pHeight / 2)
+        .attr('x2', sumX)
+        .attr('y2', sumY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', iX + iWidth)
+        .attr('y1', iY)
+        .attr('x2', sumX)
+        .attr('y2', sumY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', dX + dWidth)
+        .attr('y1', dY - dHeight / 2)
+        .attr('x2', sumX)
+        .attr('y2', sumY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', sumX + sumWidth)
+        .attr('y1', sumY)
+        .attr('x2', systemX)
+        .attr('y2', systemY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
+      svg.append('line')
+        .attr('x1', systemX)
+        .attr('y1', systemY)
+        .attr('x2', errorX)
+        .attr('y2', errorY)
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2);
     });
 </script>
 
-<style>
-  /* Slider Styles */
-  input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 200px;
-    height: 10px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
+<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 10px;">
+    <h1>The PID controller as a Block Diagram</h1>
+    <p>This is a block diagram representation of how the PID controller works. Move the mouse over the blocks to explore.</p>
+</div>  
 
-  input[type="range"]:hover {
-    opacity: 1;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #4CAF50;
-    cursor: pointer;
-    border-radius: 50%;
-  }
-
-  input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #4CAF50;
-    cursor: pointer;
-    border-radius: 50%;
-  }
-
-  /* Label Styles */
-  label {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    color: #333;
-  }
-
-    #plot {
-    margin: auto; /* Center the plot */
-    width: 800px; /* Adjust width */
-    height: 500px; /* Adjust height */
-    }
-</style>
-
-<div id="plot">
-    <!-- Plot will be rendered here -->
-</div>
-
-<!-- Sliders for adjusting parameters -->
-<div style="text-align: center; margin-top: 20px;">
-    <label for="Ki">Ki:</label>
-    <input type="range" id="Ki" name="Ki" min="0" max="5" step="0.1" bind:value={Ki} on:input={updateParameters}>
-    <span>{Ki}</span>
-
-    <label for="Kp" style="margin-left: 20px;">Kp:</label>
-    <input type="range" id="Kp" name="Kp" min="0" max="50" step="1" bind:value={Kp} on:input={updateParameters}>
-    <span>{Kp}</span>
-
-    <label for="Kd" style="margin-left: 20px;">Kd:</label>
-    <input type="range" id="Kd" name="Kd" min="0" max="50" step="1" bind:value={Kd} on:input={updateParameters}>
-    <span>{Kd}</span>
-</div>
-
-<div style="text-align: center; margin-top: 20px;">
-    <label for="initial_velocity">Initial Velocity:</label>
-    <input type="range" id="initial_velocity" name="initial_velocity" min="0" max="200" step="1" bind:value={initial_velocity} on:input={updateParameters}>
-    <span>{initial_velocity}</span>
-
-    <label for="setpoint_velocity" style="margin-left: 20px;">Set Velocity:</label>
-    <input type="range" id="setpoint_velocity" name="setpoint_velocity" min="0" max="100" step="1" bind:value={setpoint_velocity} on:input={updateParameters}>
-    <span>{setpoint_velocity}</span>
-
-    <label for="control_on_time" style="margin-left: 20px;">Cruise Control On:</label>
-    <input type="range" id="control_on_time" name="control_on_time" min="10" max="90" step="1" bind:value={control_on_time} on:input={updateParameters}>
-    <span>{control_on_time}</span>
+<!-- SVG container -->
+<div style="text-align: center;"> 
+    <svg></svg>
 </div>

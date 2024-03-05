@@ -31,13 +31,15 @@
       display: none;
   }
 </style>
+  
 
-<div>
+<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 10px;">
   <h1>The car model</h1>
   <p>For simplicity, we assume that the friction F_f force is proportional to the velocity v of the car:</p><br>
   <div id="friction-force-equation"></div>
   <p>We also assume that the car is driving in a single gear with a constant propulsion force u</p>
-
+</div>  
+<div style="position: relative;">
   <!-- Your Svelte template -->
   <svg width="500" height="250">
       <!-- Top -->

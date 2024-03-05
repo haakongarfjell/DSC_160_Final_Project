@@ -1,3 +1,4 @@
+
 <script>
   import Home from './Home.svelte';
   import Page1 from './Page1.svelte';
@@ -33,6 +34,18 @@
 </script>
 
 <style>
+
+  /* Change the background color of for all pages */
+  :global(body) {
+    background-color: #ffffff;
+    font-family: 'Gelasio', sans-serif;
+    color: #000000;
+    margin: 10;
+    padding: 10;
+    box-sizing: border-box;
+  }
+
+
   @font-face {
       font-family: 'Gelasio';
       font-style: normal;
