@@ -5,6 +5,18 @@
     let svg;
   
     onMount(() => {
+        // Load MathJax script when component mounts
+      const script = document.createElement('script');
+      script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
+      script.async = true;
+      document.head.appendChild(script);
+
+      const mathjaxScript = document.createElement('script');
+      mathjaxScript.id = 'MathJax-script';
+      mathjaxScript.async = true;
+      mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      document.head.appendChild(mathjaxScript);
+
       const width = 1200; // Adjust width as needed
       const height = 500; // Adjust height as needed
   
@@ -12,6 +24,19 @@
       svg = d3.select('svg')
         .attr('width', width)
         .attr('height', height);
+
+     // Define arrow marker
+     svg.append('defs').append('marker')
+        .attr('id', 'arrow')
+        .attr('viewBox', '0 0 10 10')
+        .attr('refX', 8)
+        .attr('refY', 5)
+        .attr('markerWidth', 6)
+        .attr('markerHeight', 6)
+        .attr('orient', 'auto')
+        .append('path')
+        .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+        .attr('fill', 'black');
   
       // Reference block
       const referenceX = 50;
@@ -198,56 +223,66 @@
         .attr('x2', errorX - errorRadius)
         .attr('y2', errorY)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
+    
       svg.append('line')
         .attr('x1', errorX + errorRadius)
         .attr('y1', errorY)
         .attr('x2', pX)
         .attr('y2', pY + pHeight / 2)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
       svg.append('line')
         .attr('x1', errorX + errorRadius)
         .attr('y1', errorY)
         .attr('x2', iX)
         .attr('y2', iY)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
       svg.append('line')
         .attr('x1', errorX + errorRadius)
         .attr('y1', errorY)
         .attr('x2', dX)
         .attr('y2', dY - dHeight / 2)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
       svg.append('line')
         .attr('x1', pX + pWidth)
         .attr('y1', pY + pHeight / 2)
         .attr('x2', sumX - sumRadius)
-        .attr('y2', sumY)
+        .attr('y2', sumY - 8)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
       svg.append('line')
         .attr('x1', iX + iWidth)
         .attr('y1', iY)
         .attr('x2', sumX - sumRadius)
         .attr('y2', sumY)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
       svg.append('line')
         .attr('x1', dX + dWidth)
         .attr('y1', dY - dHeight / 2)
         .attr('x2', sumX - sumRadius)
-        .attr('y2', sumY)
+        .attr('y2', sumY + 8)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
+
       svg.append('line')
         .attr('x1', sumX + sumRadius)
         .attr('y1', sumY)
         .attr('x2', systemX)
         .attr('y2', systemY)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrow)');
     
       svg.append('line')
         .attr('x1', systemX+systemWidth/2)
@@ -255,8 +290,7 @@
         .attr('x2', systemX+systemWidth/2)
         .attr('y2', systemY+200)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrow)');
+        .attr('stroke-width', 2);
 
       svg.append('line')
         .attr('x1', systemX+systemWidth/2)
@@ -264,9 +298,7 @@
         .attr('x2', errorX)
         .attr('y2', systemY+200)
         .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrow)');
-
+        .attr('stroke-width', 2);
       svg.append('line')
         .attr('x1', errorX)
         .attr('y1', errorY + 200)
@@ -274,8 +306,7 @@
         .attr('y2', errorY + errorRadius)
         .attr('stroke', 'black')
         .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrow)');
-      
+        .attr('marker-end', 'url(#arrow)');      
       // Tooltip
       const tooltip = d3.select("body").append("div")
         .style("opacity", 0)
@@ -286,15 +317,16 @@
         .style("padding", "10px")
         .style("pointer-events", "none");
       
-      const blocks = [
-        { element: referenceRect, text: "Reference is the desired state for the system.<br>For the cruise control it will be the desired speed." },
-        { element: errorCircle, text: "Error is the difference between the referance and what the output of the system is. <br> In the cruise control the ref. could be 50 km/h and if the speedometer shows 30 km/h the error will be 20." },
-        { element: pRect, text: "P is the Proporsonal gain of the PID. This block produces K<sub>p</sub>*error(t)." },
-        { element: iRect, text: "I is the Integral gain of the PID. This block produces K<sub>i</sub>&#8747;error(t)dt." },
-        { element: dRect, text: "D is the Derivative gain of the PID. This block produces derror(t) / dt." },
-        { element: sumCircle, text: "Sum is the sum of all P, I and D gains." },
-        { element: systemRect, text: "System is the dynamics of a given system.<br> For this project the car model." }
-      ];
+        const blocks = [
+        { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain." },
+        { element: errorCircle, text: "<span style='font-weight: bold;'>Error</span> indicates the disparity between the reference value and the actual output of the system.<br>For example, in cruise control, if the desired speed is set to 50 km/h but the speedometer reads 30 km/h, the error would be 20 km/h." },
+        { element: pRect, text: "<span style='font-weight: bold;'>P (Proportional Gain)</span> determines the immediate response of the system to changes in error.<br>It produces an output proportional to the current error multiplied by a constant factor, Kp." },
+        { element: iRect, text: "<span style='font-weight: bold;'>I (Integral Gain)</span> accounts for accumulated error over time.<br>It integrates the error signal with respect to time, helping to eliminate steady-state error and improve system stability." },
+        { element: dRect, text: "<span style='font-weight: bold;'>D (Derivative Gain)</span> anticipates future trends in the error signal by measuring its rate of change. <br>This helps dampen oscillations and improve transient response." },
+        { element: sumCircle, text: "<span style='font-weight: bold;'>Sum</span> combines the contributions from the P, I, and D components to form the overall control signal applied to the system." },
+        { element: systemRect, text: "<span style='font-weight: bold;'>System</span> represents the dynamics of the physical system being controlled. In the context of this project, it could represent the model of the car and its behavior under different conditions." }
+        ];
+
       
       blocks.forEach(block => {
         // Store original fill color
@@ -329,10 +361,9 @@
 
 
 
-<!-- Marker for arrows -->
 
 <style>
-    body {
+    body {  
         user-select: none; /* Disable text selection */
     }
     .highlight:hover {
