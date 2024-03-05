@@ -59,7 +59,7 @@
   
   nav {
     position: fixed;
-    bottom: 0px; /* Adjust based on the height of the arrow container */
+    bottom: -10px; 
     left: 20px;
     margin-bottom: 20px;
   }
@@ -97,7 +97,7 @@
     right: 20px;
     display: flex;
     justify-content: space-between;
-    width: 100px; /* Adjust this width as needed */
+    width: 100px; 
     z-index: 9999;
   }
 
