@@ -6,6 +6,7 @@
   import Page3 from './Page3.svelte';
   import Page4 from './Page4.svelte';
   import Page5 from './Page5.svelte';
+  import Page6 from './Page6.svelte';
 
   let currentPage = 'home';
 
@@ -21,6 +22,7 @@
     else if (currentPage === 'page3') currentPage = 'page2';
     else if (currentPage === 'page4') currentPage = 'page3';
     else if (currentPage === 'page5') currentPage = 'page4';
+    else if (currentPage === 'page6') currentPage = 'page5';
   };
 
   const goToNextPage = () => {
@@ -28,8 +30,9 @@
     else if (currentPage === 'page1') currentPage = 'page2'; 
     else if (currentPage === 'page2') currentPage = 'page3'; 
     else if (currentPage === 'page3') currentPage = 'page4'; 
-    else if (currentPage === 'page4') currentPage = 'page5'; 
-    else if (currentPage === 'page5') return;
+    else if (currentPage === 'page4') currentPage = 'page5';
+    else if (currentPage === 'page5') currentPage = 'page6';
+    else if (currentPage === 'page6') return; 
   };
 </script>
 
@@ -56,8 +59,8 @@
   
   nav {
     position: fixed;
-    bottom: 20px;
-    left: 20px; 
+    bottom: 0px; /* Adjust based on the height of the arrow container */
+    left: 20px;
     margin-bottom: 20px;
   }
 
@@ -115,11 +118,12 @@
 <nav>
   <ul>
     <li><a href="#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>Page 1</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Page 2</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>Page 3</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>Page 4</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>Page 5</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>System model</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Block diagram model</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>P-controller</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>PI-controller</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>PID-controller</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page6'} on:click|preventDefault={() => navigate('page6')}>Page 6</a></li>
   </ul>
 </nav>
 
@@ -135,6 +139,8 @@
   <Page4 />
 {:else if currentPage === 'page5'}
   <Page5 />
+{:else if currentPage === 'page6'}
+  <Page6 />
 {:else}
   <p>Page not found</p>
 {/if}
