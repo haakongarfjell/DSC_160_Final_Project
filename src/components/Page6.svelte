@@ -2,211 +2,305 @@
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
   
-    let svg;
-  
+    let svgWidth = 500;
+    let svgHeight = 300;
+    let carSpeed = 100;
+    let carMass = 50;
+
+    // Define variables for car dimensions and positions
+    let carTopX = 70;
+    let carTopY = 10;
+    let carTopWidth = 220;
+    let carTopHeight = 130;
+    let carBodyX = 10;
+    let carBodyY = 70;
+    let carBodyWidth = 340;
+    let carBodyHeight = 80;
+    let leftLineX = carTopX + carTopWidth / 2;
+    let rightLineX = leftLineX + 70;
+    let leftBumperX = 0;
+    let rightBumperX = carBodyWidth - 40;
+    let leftWheelX = 90;
+    let rightWheelX = 270;
+    let wheelY = 140;
+    let goldLightX = carBodyWidth;
+    let goldLightY = carTopY + carTopHeight / 2 + 10;
+    let orangeLightX = carBodyX - 25;
+    let orangeLightY = carTopY + carTopHeight / 2;
+    let groundY = 180;
+    let groundLineX2 = carBodyWidth;
+    let polygonX = carTopX + carTopWidth / 2 + 10;
+
+    function plotData() {
+        const svg = d3.select('svg')
+            .attr('width', svgWidth)
+            .attr('height', svgHeight);
+
+        // Remove old plot before drawing new one
+        svg.selectAll('*').remove();
+
+        // Define arrow marker
+        svg.append('defs').append('marker')
+            .attr('id', 'arrow')
+            .attr('viewBox', '0 0 10 10')
+            .attr('refX', 8)
+            .attr('refY', 5)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 6)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+            .attr('fill', 'black');
+
+        // Car top
+        svg.append('rect')
+            .attr('x', carTopX)
+            .attr('y', carTopY)
+            .attr('width', carTopWidth)
+            .attr('height', carTopHeight)
+            .attr('fill', 'transparent')
+            .attr('rx', carTopHeight / 2)
+            .attr('stroke', 'crimson')
+            .attr('stroke-width', 10);
+
+        // Car body
+        svg.append('rect')
+            .attr('x', carBodyX)
+            .attr('y', carBodyY)
+            .attr('width', carBodyWidth)
+            .attr('height', carBodyHeight)
+            .attr('fill', 'crimson')
+            .attr('rx', 30);
+
+        // Left line
+        svg.append('line')
+            .attr('x1', leftLineX)
+            .attr('y1', carTopY)
+            .attr('x2', leftLineX)
+            .attr('y2', carBodyY)
+            .attr('stroke', 'crimson')
+            .attr('stroke-width', 10);
+
+        // Right line
+        svg.append('line')
+            .attr('x1', rightLineX)
+            .attr('y1', carTopY + 5)
+            .attr('x2', rightLineX)
+            .attr('y2', carBodyY)
+            .attr('stroke', 'crimson')
+            .attr('stroke-width', 10);
+
+        // Right line
+        svg.append('line')
+            .attr('x1', leftLineX-70)
+            .attr('y1', carTopY + 5)
+            .attr('x2', leftLineX-70)
+            .attr('y2', carBodyY)
+            .attr('stroke', 'crimson')
+            .attr('stroke-width', 10);
+
+        // Left bumper
+        svg.append('rect')
+            .attr('x', leftBumperX)
+            .attr('y', carBodyY + 40)
+            .attr('width', 40)
+            .attr('height', 20)
+            .attr('fill', '#999')
+            .attr('rx', 10);
+
+        // Right bumper
+        svg.append('rect')
+            .attr('x', rightBumperX + 25)
+            .attr('y', carBodyY + 40)
+            .attr('width', 40)
+            .attr('height', 20)
+            .attr('fill', '#999')
+            .attr('rx', 10);
+
+        // Left wheel
+        svg.append('g')
+            .attr('transform', `translate(${leftWheelX}, ${wheelY})`)
+            .append('circle')
+            .attr('r', '40px')
+            .attr('fill', '#222')
+            .attr('stroke', 'white')
+            .attr('stroke-width', 7);
+
+        // Right wheel
+        svg.append('g')
+            .attr('transform', `translate(${rightWheelX}, ${wheelY})`)
+            .append('circle')
+            .attr('r', '40px')
+            .attr('fill', '#222')
+            .attr('stroke', 'white')
+            .attr('stroke-width', 7);
+
+        // Left wheel
+        svg.append('g')
+            .attr('transform', `translate(${leftWheelX}, ${wheelY})`)
+            .append('circle')
+            .attr('r', '15px')
+            .attr('fill', '#555');
+
+        // Left wheel
+        svg.append('g')
+            .attr('transform', `translate(${rightWheelX}, ${wheelY})`)
+            .append('circle')
+            .attr('r', '15px')
+            .attr('fill', '#555');
+
+        // Headlights
+        svg.append('g')
+            .attr('transform', `translate(${goldLightX}, ${goldLightY})`)
+            .append('circle')
+            .attr('r', '15px')
+            .attr('fill', 'gold');
+
+
+        // Friction force line with arrow
+        svg.append('line')
+            .attr('x1', rightWheelX)
+            .attr('y1', groundY)
+            .attr('x2', rightWheelX - carMass)
+            .attr('y2', groundY)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3)
+            .attr('marker-end', 'url(#arrow)');
+
+        // Text under the arrow
+        svg.append('text')
+            .attr('x', rightWheelX)
+            .attr('y', groundY + 20)
+            .text('Ground Friction Force')
+            .style('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .style('fill', 'black')
+            .style('font-weight', 'bold');
+
+         // Engine force line with arrow
+        svg.append('line')
+            .attr('x1', rightBumperX+50)
+            .attr('y1', carBodyY + 50)
+            .attr('x2', rightBumperX + 130)
+            .attr('y2', carBodyY + 50)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3)
+            .attr('marker-end', 'url(#arrow)');
+
+        // Text under the arrow
+        svg.append('text')
+            .attr('x', rightBumperX+100)
+            .attr('y', carBodyY + 80)
+            .text('Engine Force')
+            .style('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .style('fill', 'black')
+            .style('font-weight', 'bold');   
+
+        // Air Recistiance force line with arrow
+        svg.append('line')
+            .attr('x1', rightBumperX + carSpeed)
+            .attr('y1', carBodyY-10)
+            .attr('x2', rightBumperX)
+            .attr('y2', carBodyY - 10) 
+            .attr('stroke', 'black')
+            .attr('stroke-width', 3)
+            .attr('marker-end', 'url(#arrow)');
+
+        // Text under the arrow
+        svg.append('text')
+            .attr('x', rightBumperX + 60)
+            .attr('y', carBodyY - 30)
+            .text('Air Resistance  Force')
+            .style('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .style('fill', 'black')
+            .style('font-weight', 'bold');  
+    }
+
+    function updateCarMass(event) {
+        carMass = +event.target.value;
+        plotData();
+    }
+    function updateCarSpeed(event) {
+        carSpeed = +event.target.value;
+        plotData();
+    }
+
     onMount(() => {
-        // Load MathJax script when component mounts
-      const script = document.createElement('script');
-      script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
-      script.async = true;
-      document.head.appendChild(script);
-
-      const mathjaxScript = document.createElement('script');
-      mathjaxScript.id = 'MathJax-script';
-      mathjaxScript.async = true;
-      mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      document.head.appendChild(mathjaxScript);
-
-      const width = 1000; // Adjust width as needed
-      const height = 500; // Adjust height as needed
-  
-      // Create SVG element
-      svg = d3.select('svg')
-        .attr('width', width)
-        .attr('height', height);
-
-     // Define arrow marker
-     svg.append('defs').append('marker')
-        .attr('id', 'arrow')
-        .attr('viewBox', '0 0 10 10')
-        .attr('refX', 8)
-        .attr('refY', 5)
-        .attr('markerWidth', 6)
-        .attr('markerHeight', 6)
-        .attr('orient', 'auto')
-        .append('path')
-        .attr('d', 'M 0 0 L 10 5 L 0 10 z')
-        .attr('fill', 'black');
-  
-      // Reference block
-      const referenceX = 50;
-      const referenceY = height / 2;
-      const referenceWidth = 150;
-      const referenceHeight = 80;
-      const referenceRect = svg.append('rect')
-        .attr('x', referenceX)
-        .attr('y', referenceY - referenceHeight / 2)
-        .attr('width', referenceWidth)
-        .attr('height', referenceHeight)
-        .attr('fill', 'lightblue')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .on('mouseover', function() {
-          d3.select(this).attr('fill', 'lightcyan');
-        })
-        .on('mouseout', function() {
-          d3.select(this).attr('fill', 'lightblue');
-        });
-      svg.append('text')
-        .attr('x', referenceX + referenceWidth / 2)
-        .attr('y', referenceY - 10)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('Reference for')
-      svg.append('text')
-        .attr('x', referenceX + referenceWidth / 2)
-        .attr('y', referenceY + 10)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('Cruise Control');
-  
-      // BLACK BOX
-      const blackBoxX = referenceX + referenceWidth + 200;
-      const blackBoxY = height / 2;
-      const blackBoxWidth = 150;
-      const blackBoxHeight = 80;
-      const blackBoxRect = svg.append('rect')
-        .attr('x', blackBoxX)
-        .attr('y', blackBoxY - blackBoxHeight / 2)
-        .attr('width', blackBoxWidth)
-        .attr('height', blackBoxHeight)
-        .attr('fill', 'lightgreen')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .on('mouseover', function() {
-          d3.select(this).attr('fill', 'lightgreenyellow');
-        })
-        .on('mouseout', function() {
-          d3.select(this).attr('fill', blackBoxRect.attr('original-fill'));
-        });
-      svg.append('text')
-        .attr('x', blackBoxX + blackBoxWidth / 2)
-        .attr('y', blackBoxY)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('BLACK BOX');
-  
-      // Car going desired speed
-      const carX = blackBoxX + blackBoxWidth + 200;
-      const carY = height / 2;
-      const carWidth = 150;
-      const carHeight = 80;
-      const carRect = svg.append('rect')
-        .attr('x', carX)
-        .attr('y', carY - carHeight / 2)
-        .attr('width', carWidth)
-        .attr('height', carHeight)
-        .attr('fill', 'lightcoral')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .on('mouseover', function() {
-          d3.select(this).attr('fill', 'lightcoral');
-        })
-        .on('mouseout', function() {
-          d3.select(this).attr('fill', 'lightcoral');
-        });
-      svg.append('text')
-        .attr('x', carX + carWidth / 2)
-        .attr('y', carY - 10)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('Car going desired')
-      svg.append('text')
-        .attr('x', carX + carWidth / 2)
-        .attr('y', carY + 10)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('speed');
-      
-      // Tooltip
-      const tooltip = d3.select("body").append("div")
-        .style("opacity", 0)
-        .style("position", "absolute")
-        .style("background-color", "lightgray")
-        .style("border", "1px solid black")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
-        .style("pointer-events", "none");
-      
-        const blocks = [
-        { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain." },
-        { element: blackBoxRect, text: "<span style='font-weight: bold;'>BLACK BOX</span> is the controller itself, processing the error signal and generating control actions based on PID parameters." },
-        { element: carRect, text: "<span style='font-weight: bold;'>Car going desired speed</span> represents the system output, indicating whether the car is achieving the desired speed set by the reference." }
-        ];
-
-      // Arrows
-      const arrowPathRefToBox = `M${referenceX + referenceWidth},${referenceY} L${blackBoxX},${blackBoxY}`;
-      const arrowPathBoxToCar = `M${blackBoxX + blackBoxWidth},${blackBoxY} L${carX},${carY}`;
-      svg.append('path')
-        .attr('d', arrowPathRefToBox)
-        .attr('fill', 'none')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrow)');
-      svg.append('path')
-        .attr('d', arrowPathBoxToCar)
-        .attr('fill', 'none')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#arrow)');
-      
-      blocks.forEach(block => {
-        // Store original fill color
-        block.element.attr('original-fill', block.element.attr('fill'));
-        
-        block.element.on("mouseover", function() {
-          block.element.attr('fill', 'lightcyan');
-          const { x, y, width, height } = block.element.node().getBoundingClientRect();
-          const centerX = x + width / 2;
-          const centerY = y + height / 2;
-          const tooltipX = centerX - tooltip.node().offsetWidth / 2;
-          const tooltipY = y + height + 20;
-          
-          tooltip.transition()
-            .duration(200)
-            .style("opacity", 1)
-            .style("left", tooltipX + "px")
-            .style("top", tooltipY + "px");
-            
-          tooltip.html('<div>' + block.text + '</div>');
-        })
-        .on("mouseout", function() {
-          // Reset to original fill color
-          block.element.attr('fill', block.element.attr('original-fill'));
-          tooltip.transition()
-            .duration(500)
-            .style("opacity", 0);
-        });
-      });
+        plotData();
     });
 </script>
 
 <style>
-    body {  
-        user-select: none; /* Disable text selection */
+    /* Slider Styles */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 200px;
+      height: 10px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+      border-radius: 5px;
+      margin-bottom: 10px;
     }
-    .highlight:hover {
-        font-weight: bold;
-        color: blue;
+  
+    input[type="range"]:hover {
+      opacity: 1;
     }
-</style>
-
+  
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+  
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+  
+    /* Label Styles */
+    label {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+  
+      #plot {
+      margin: auto; /* Center the plot */
+      width: 800px; /* Adjust width */
+      height: 500px; /* Adjust height */
+      }
+  </style>
+  
 <div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 10px;">
-    <h1>The PID controller as a Block Diagram</h1>
+    <h1>The Physical Car Model</h1>
     <p>This is a block diagram representation of how the PID controller works. Move the mouse over the blocks to explore.</p>
 </div>  
-
+  
 <!-- SVG container -->
-<div style="text-align: center;"> 
+<div style="text-align: center; margin-top: 20px; padding: 20px;"> 
     <svg></svg>
+</div>
+
+<!-- Slider for adjusting the mass -->
+<div style="text-align: center; margin-top: 20px;">
+    <label for="carMass">Car Mass:</label>
+    <input type="range" id="carMass" name="carMass" min="10" max="100" bind:value={carMass} on:input={updateCarMass}>
+    <span>{carMass}</span>
+    <br>
+    <label for="carSpeed">Car Speed:</label>
+    <input type="range" id="carSpeed" name="carSpeed" min="10" max="100" bind:value={carSpeed} on:input={updateCarSpeed}>
+    <span>{carSpeed}</span>
 </div>
