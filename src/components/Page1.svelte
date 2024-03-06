@@ -289,7 +289,7 @@
   </style>
 
 
-<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
     <h1>Modelling the car</h1>
     <p>To implement a PID controller, one needs a model of a physical system. In this case, we will use a simple model of a car.</p>
     <p>The car is subject to air resistance, friction, and engine power. The differential equation governing the car's motion is derived from Newton's law of motion:</p>

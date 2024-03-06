@@ -315,7 +315,7 @@
 
 
 <!-- Make a text box for explainations -->
-<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
     <h1>Introducing a I term</h1>
     <p>
         This is a simulation of a cruise control system using a PI controller. You can adjust the Kp and Ki parameters using the sliders above to see how they affect the system's response.

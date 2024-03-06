@@ -313,7 +313,7 @@
 
 
 
-<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
-  <h1>Cruise Control with PID Controller Simulator</h1>
+<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+  <h1>Full Simulator of Cruise Control with PID Controller</h1>
     <p>Experience how a PID controller regulates cruise control. Adjust the proportional (P), integral (I), and derivative (D) terms, along with the set velocity and initial velocity when cruise control is activated.</p>
 </div>

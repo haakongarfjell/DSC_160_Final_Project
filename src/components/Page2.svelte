@@ -56,7 +56,8 @@
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .text('Reference');
-        
+
+    
       // Error circle
       const errorX = referenceX + referenceWidth + 200;
       const errorY = height / 2;
@@ -208,6 +209,20 @@
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .text('System');
+
+      svg.append('text')
+        .attr('x', sumX - (sumX - systemX) / 2)
+        .attr('y', systemY - 10)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('u');
+
+      svg.append('text')
+        .attr('x', sumX - (sumX - systemX) / 2)
+        .attr('y', systemY + 190)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('v');
       
       // Arrows
       svg.append('line')
@@ -367,7 +382,7 @@
 
 
 
-<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
   <h1>The PID controller as a Block Diagram</h1>
     <p>This is a block diagram representation of how the PID controller works. Move the mouse over the blocks to explore.</p>
 </div>  
