@@ -62,13 +62,6 @@
     <Katex displayMode>{"u - \\mu m g - k v = m \\frac{dv}{dt}"}</Katex>
     <Katex displayMode>{"\\frac{dv}{dt} = u - \\mu g - \\frac{k}{m} v"}</Katex>
     <p>We now have a differential equation describing how the velocity changes over time. Explore how the car's mass and and velocity affects the forces below!</p>
-    <!-- <ul>
-        <li>\( v \) is the velocity of the car</li>
-        <li>\( k \) is the air resistance constant</li>
-        <li>\( m \) is the mass of the car</li>
-        <li>\( F_f \) is the friction force</li>
-        <li>\( u \) is the engine power</li>
-    </ul> -->
 </div>  
 
 <div style="position: relative;">
