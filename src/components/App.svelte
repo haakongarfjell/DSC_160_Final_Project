@@ -40,7 +40,7 @@
 
   /* Change the background color of for all pages */
   :global(body) {
-    background-color: #ffffff;
+    background-color: #e5e7ef;
     font-family: 'Gelasio', sans-serif;
     color: #000000;
     margin: 10;
