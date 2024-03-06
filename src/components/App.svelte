@@ -1,6 +1,6 @@
 
 <script>
-  import Page6 from './Intro.svelte';
+  import Intro from './Intro.svelte';
   import Home from './Home.svelte';
   import Page1 from './Page1.svelte';
   import Page2 from './Page2.svelte';
@@ -8,7 +8,7 @@
   import Page4 from './Page4.svelte';
   import Page5 from './Page5.svelte';
 
-  let currentPage = 'home';
+  let currentPage = 'intro';
 
   const navigate = (page) => {
     currentPage = page;
@@ -127,7 +127,9 @@
   </ul>
 </nav>
 
-{#if currentPage === 'home'}
+{#if currentPage === 'intro'}
+  <Intro />
+{:else if currentPage === 'home'}
   <Home />
 {:else if currentPage === 'page1'}
   <Page1 />
@@ -139,8 +141,6 @@
   <Page4 />
 {:else if currentPage === 'page5'}
   <Page5 />
-{:else if currentPage === 'intro'}
-  <Page6 />
 {:else}
   <p>Page not found</p>
 {/if}
