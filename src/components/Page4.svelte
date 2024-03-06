@@ -318,14 +318,16 @@
 <div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
     <h1>Introducing a I term</h1>
     <p>
-        This is a simulation of a cruise control system using a PI controller. You can adjust the Kp and Ki parameters using the sliders above to see how they affect the system's response.
+        Let's see what happens when we introduce integral effect to the system, i.e. adding a PI-controller. You can adjust the Kp and Ki parameters using the sliders above to see how they affect the system's response.
     </p>
 
     <p>
-        The Ki term helps to eliminate the steady state error, as it integrates the error over time and drives it to zero.
+        As we can see, we can eliminate the steady-state error without increasing the proportional gain to a very high value. Try letting Kp be zero and maxing out Ki.
     </p>
     <p>
-        But if the Ki term is too high, it can cause the system to become unstable and oscillate and a cruise control system should not oscillate.
+        The response will overshoot the reference before setteling. We call this an underdamped system, and the responsibility of a control engineer is to find the correct parameters to make the system reach the reference as fast as possible without overshooting. We call this a criticaly dampened system.
     </p>
 
 </div>
+<p></p><br>
+<p></p><br>

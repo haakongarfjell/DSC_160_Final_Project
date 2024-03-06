@@ -338,11 +338,11 @@
         const blocks = [
         { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain."  },
         { element: errorCircle, text: "<span style='font-weight: bold;'>Error</span> indicates the disparity between the reference value and the actual output of the system.<br>For example, in cruise control, if the desired speed is set to 50 km/h but the speedometer reads 30 km/h, the error would be 20 km/h." },
-        { element: pRect, text: "<span style='font-weight: bold;'>P (Proportional Gain)</span> determines the immediate response of the system to changes in error.<br>It produces an output proportional to the current error multiplied by a constant factor, Kp." },
+        { element: pRect, text: "<span style='font-weight: bold;'>P (Proportional Gain)</span> determines the immediate response of the system to changes in error.<br>It produces an output proportional to the current error multiplied by a constant factor." },
         { element: iRect, text: "<span style='font-weight: bold;'>I (Integral Gain)</span> accounts for accumulated error over time.<br>It integrates the error signal with respect to time, helping to eliminate steady-state error and improve system stability." },
         { element: dRect, text: "<span style='font-weight: bold;'>D (Derivative Gain)</span> anticipates future trends in the error signal by measuring its rate of change. <br>This helps dampen oscillations and improve transient response." },
-        { element: sumCircle, text: "<span style='font-weight: bold;'>Sum</span> combines the contributions from the P, I, and D components to form the overall control signal applied to the system." },
-        { element: systemRect, text: "<span style='font-weight: bold;'>System</span> represents the dynamics of the physical system being controlled. In the context of this project, it could represent the model of the car and its behavior under different conditions." }
+        { element: sumCircle, text: "<span style='font-weight: bold;'>Sum</span> summing the contributions from the P, I, and D creates the final control input that will be applied to the system." },
+        { element: systemRect, text: "<span style='font-weight: bold;'>System</span> represents the dynamics of the physical system being controlled, in this case the car system model." }
         ];
 
       

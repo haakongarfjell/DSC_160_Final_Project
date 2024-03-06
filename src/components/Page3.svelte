@@ -304,13 +304,16 @@
 <div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
     <h1>But why do you need a P, I and D term?</h1>
     <p>
-        This is a simulation of a cruise control system only using a P controller. The slider above can be used to adjust the value of Kp, the proportional gain of the controller. The blue line represents the velocity of the car over time, while the green line represents the setpoint velocity. The red dashed line indicates the time at which the cruise control is turned on. The black solid line indicates the steady state error at 90 seconds.
+        Lets explore what happens if we only include the P-term, in other words what happens when applying a P-controller. The slider above can be used to adjust the value of Kp, the proportional gain of the controller. The blue line represents the velocity of the car over time, while the green line represents the setpoint velocity. The red dashed line indicates the time at which the cruise control is turned on. The black solid line indicates the steady state error at 90 seconds.
     </p>
 
     <p>
-        The steady state error is the difference between the setpoint velocity and the actual velocity of the car after the system has reached a stable state. Adjusting the value of Kp can affect the steady state error and the overall performance of the cruise control system.    
+        The steady-state error represents the difference between the setpoint velocity and the actual car velocity. As we can see, no matter how much we increase the proportional gain, we can never get the steady-state error to zero. In theory, increasing the proportional gain to infinity could make the car reach the reference, however this would require an infinitely large acceleration which is physically impossible. 
+        <!-- The steady state error is the difference between the setpoint velocity and the actual velocity of the car after the system has reached a stable state. Adjusting the value of Kp can affect the steady state error and the overall performance of the cruise control system.     -->
     </p>
 </div>
+<p></p><br>
+<p></p><br>
 
 
 
