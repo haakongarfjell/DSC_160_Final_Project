@@ -233,7 +233,7 @@
         <div style="text-align: center;"> 
             <svg></svg>
         </div>
-        <p1>Given a desired setpoint reference:</p1><Katex>{"r \\,"}</Katex><p1> and a measured velocity</p1><Katex>{"y \\,"}</Katex><p1>, the controller aims to adjust the control input</p1><Katex>{"u \\,"}</Katex><p1> so that the error </p1><Katex>{"e = r - y \\,"}</Katex><p1>approaches 0 in a both fast and controlled manner.<br>
+        <p1>Given a desired setpoint reference:</p1><Katex>{"r \\,"}</Katex><p1> and a measured velocity</p1><Katex>{"v \\,"}</Katex><p1>, the controller aims to adjust the control input</p1><Katex>{"u \\,"}</Katex><p1> so that the error </p1><Katex>{"e = r - v \\,"}</Katex><p1>approaches 0 in a both fast and controlled manner.<br>
         <p1>The PID controller is composed of three terms: the proportional term, the integral term, and the derivative term.</p1><br>
         <div class="centered">
             <div class="term-box-container">
@@ -274,10 +274,6 @@
         <p1>The most challening part will be to create an interactive visualisation of the car model (page1). Also describing the robostness to noise can be somewhat challenging to visualize</p1><br>
         <p1> This will be done by interacing with the equations with the mouse. Also describing the robostness to noise can be somewhat challenging to visualize. We are thinking of letting the user adding a hill to the simulations to make it realistic. </p1> -->
 
-    </div><br>
+    </div>
     <!-- <img src = "https://www.thorlabs.com/images/TabImages/PID2.jpg" alt = "PID controller" width = "800" height = "300"> -->
-</div>
-
-<div style="text-align: center;"> 
-    <svg></svg>
 </div>
