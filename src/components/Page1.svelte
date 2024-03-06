@@ -1,7 +1,8 @@
 <!-- Page2.svelte -->
 <script>
     import { onMount } from 'svelte';
-    import katex from 'katex';
+    import Katex from 'svelte-katex';
+    import 'katex/dist/katex.min.css';
     let showTooltip = false;
 
     function toggleTooltip() {
@@ -50,21 +51,24 @@
 
 
 <div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 10px;">
-    <h1>The Physical Car Model</h1>
+    <h1>Modelling the car</h1>
     <p>To implement a PID controller, one needs a model of a physical system. In this case, we will use a simple model of a car.</p>
     <p>The car is subject to air resistance, friction, and engine power. The differential equation governing the car's motion is derived from Newton's law of motion:</p>
-    <p>Sum F = m a</p>
-    <p>u - Ff - Fl = m v_dot</p>
-    <p>u - Ff - k*v = m v_dot</p>
-    <p>v_dot = (1/m)</p>
-    <p>Where:</p>
-    <ul>
+    <Katex displayMode>{"\\sum F = ma"}</Katex>
+    <p>A simple motion model for a car can then be expressed as:</p>
+    <Katex displayMode>{"u - F_f - F_l = m \\frac{dv}{dt}"}</Katex>
+    <p1>Where </p1><Katex>{"u \\,"}</Katex><p1> is the control input (think of this as pressing the gas pedal), </p1> <Katex>{"F_f \\,"}</Katex><p1> is the friction force and </p1> <Katex>{"F_l \\,"}</Katex><p1> is the air resistance force.</p1><br>
+    <p1>Inserting standard models for friction and air resistance: </p1> <Katex>{"F_f = \\mu N = \\mu m g"}</Katex> <p1> and </p1> <Katex>{"F_l = k v"}</Katex> <p1> ,where </p1> <Katex>{"\\mu"}</Katex> <p1> and </p1> <Katex>{"k"}</Katex> <p1> are the friction and air resitance coefficients repsectively, we get:</p1><br>
+    <Katex displayMode>{"u - \\mu m g - k v = m \\frac{dv}{dt}"}</Katex>
+    <Katex displayMode>{"\\frac{dv}{dt} = u - \\mu g - \\frac{k}{m} v"}</Katex>
+    <p>We now have a differential equation describing how the velocity changes over time. Explore how the car's mass and and velocity affects the forces below!</p>
+    <!-- <ul>
         <li>\( v \) is the velocity of the car</li>
         <li>\( k \) is the air resistance constant</li>
         <li>\( m \) is the mass of the car</li>
         <li>\( F_f \) is the friction force</li>
         <li>\( u \) is the engine power</li>
-    </ul>
+    </ul> -->
 </div>  
 
 <div style="position: relative;">
