@@ -264,6 +264,8 @@
             </div>
         </div>
         <p1>Explore how we model the dynamical system of a car on the next page, or jump to the parts you find most interesting!</p1><br>
+        <p> </p><br>
+        <p> </p><br>
 
         <!-- <p1>Writeup</p1><br>
         <p1>This is a prototype, future steps will describe the dynamic system, P-controller, PI-controller, PD-controller, and then PID-controller as well as demonstrating its robustness to noise</p1><br>

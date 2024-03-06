@@ -8,6 +8,7 @@
     let svg;
   
     onMount(() => {
+
       const width = 1200; // Adjust width as needed
       const height = 500; // Adjust height as needed
   
@@ -223,7 +224,15 @@
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .text('v');
-      
+
+      const rX = referenceX + (errorX - referenceX) / 2 + 30;
+      const rY = referenceY - 10;
+      svg.append('text')
+        .attr('x', rX)
+        .attr('y', rY)
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .text('r');
       // Arrows
       svg.append('line')
         .attr('x1', referenceX + referenceWidth)
@@ -325,6 +334,7 @@
         .style("padding", "10px")
         .style("pointer-events", "none");
       
+        
         const blocks = [
         { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain."  },
         { element: errorCircle, text: "<span style='font-weight: bold;'>Error</span> indicates the disparity between the reference value and the actual output of the system.<br>For example, in cruise control, if the desired speed is set to 50 km/h but the speedometer reads 30 km/h, the error would be 20 km/h." },
@@ -383,8 +393,10 @@
 
 
 <div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
-  <h1>The PID controller as a Block Diagram</h1>
-    <p>This is a block diagram representation of how the PID controller works. Move the mouse over the blocks to explore.</p>
+  <h1>Block diagram representation</h1>
+    <p>In control theory, a common practice is to visualize a controller as a block diagram. Each block takes in an input and produces and output indicated by the arrows. 
+      A block diagram for a PID-controller system is shown below. Hover over the blocks to explore what they do.
+    </p>
 </div>  
 
 <!-- SVG container -->
