@@ -11,19 +11,24 @@
     let Ki = 1;
     
     // Define PID controller function
-    function PID_controller(K, current_velocity, setpoint_velocity, errors) {
+    function PID_controller(K, current_velocity, setpoint_velocity, errors, currentTime, controlOnTime) {
         const [Kp, Ki, Kd] = K;
-    
+
         const error = setpoint_velocity - current_velocity;
-    
+        let D = 0; // Initialize derivative term to 0 initially
+
+        // Only calculate the derivative term if the current time is after the control on time
+        if (currentTime > controlOnTime + 1.0) {
+            D = -12*Kd * (error - errors[errors.length - 1]);
+        }
+
         const P = Kp * error;
         const I = Ki * errors.reduce((acc, curr) => acc + curr, 0);
-        const D = Kd * (error - errors[errors.length - 1]);
-    
+
         const control_signal = P + I + D;
         return [control_signal, error];
     }
-    
+
     // Define the differential equation of the system
     function dv_dt(current_velocity, control_signal) {
         const mass = 100;  // Mass of car in kg
@@ -48,7 +53,7 @@
         for (let t = initial_time; t <= final_time; t += dt) {
           time.push(t);
           if (t > control_on_time) {
-            [control_signal, error] = PID_controller(K, current_velocity, setpoint_velocity, errors);
+            [control_signal, error] = PID_controller(K, current_velocity, setpoint_velocity, errors, t, control_on_time);
             errors.push(error);
           }
           velocity.push(current_velocity);
@@ -315,7 +320,7 @@
 
 <div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
   <h1>The complete PID-Controller</h1>
-    <p>Lets experiment with how the PID-controller affects the cruise control model. Adjust the proportional (P), integral (I), and derivative (D) terms, along with the set velocity and initial velocity when cruise control is activated.</p>
+    <p>Lets experiment with how the PID-controller affects the cruise control model by including the D-term. This gives us a little more flexibility in order to reduce oscillations. Adjust the proportional (Kp), integral (Ki), and derivative (Kd) terms, along with the setpoint velocity and initial velocity when cruise control is activated.</p>
     <p>Test your control engineer abilities by making the system critically dampened for various conditions of initial velocities and setpoint values! </p>
 </div>
 
