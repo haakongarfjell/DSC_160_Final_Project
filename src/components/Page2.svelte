@@ -1,22 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+    import Katex from 'svelte-katex';
+    // import { InlineMath } from 'svelte-katex';
+    import 'katex/dist/katex.min.css';
   
     let svg;
   
     onMount(() => {
-        // Load MathJax script when component mounts
-      const script = document.createElement('script');
-      script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
-      script.async = true;
-      document.head.appendChild(script);
-
-      const mathjaxScript = document.createElement('script');
-      mathjaxScript.id = 'MathJax-script';
-      mathjaxScript.async = true;
-      mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      document.head.appendChild(mathjaxScript);
-
       const width = 1200; // Adjust width as needed
       const height = 500; // Adjust height as needed
   
@@ -57,13 +48,15 @@
         .on('mouseout', function() {
           d3.select(this).attr('fill', 'lightblue');
         });
+
+        
       svg.append('text')
-        .attr('x', referenceX + referenceWidth / 2)
-        .attr('y', referenceY)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('Reference');
-  
+      .attr('x', referenceX + referenceWidth / 2)
+      .attr('y', referenceY)
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .text('Reference');
+        
       // Error circle
       const errorX = referenceX + referenceWidth + 200;
       const errorY = height / 2;
@@ -215,21 +208,7 @@
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .text('System');
-
-      svg.append('text')
-        .attr('x', sumX + (systemX - sumX)/2)
-        .attr('y', systemY - 10)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('u');
-
-      svg.append('text')
-        .attr('x', sumX + (systemX - sumX)/2)
-        .attr('y', systemY + 190)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .text('v');
-
+      
       // Arrows
       svg.append('line')
         .attr('x1', referenceX + referenceWidth)
@@ -332,7 +311,7 @@
         .style("pointer-events", "none");
       
         const blocks = [
-        { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain." },
+        { element: referenceRect, text: "<span style='font-weight: bold;'>Reference</span> represents the desired state or setpoint for the system.<br>In the context of cruise control, it signifies the target speed the vehicle aims to maintain."  },
         { element: errorCircle, text: "<span style='font-weight: bold;'>Error</span> indicates the disparity between the reference value and the actual output of the system.<br>For example, in cruise control, if the desired speed is set to 50 km/h but the speedometer reads 30 km/h, the error would be 20 km/h." },
         { element: pRect, text: "<span style='font-weight: bold;'>P (Proportional Gain)</span> determines the immediate response of the system to changes in error.<br>It produces an output proportional to the current error multiplied by a constant factor, Kp." },
         { element: iRect, text: "<span style='font-weight: bold;'>I (Integral Gain)</span> accounts for accumulated error over time.<br>It integrates the error signal with respect to time, helping to eliminate steady-state error and improve system stability." },
