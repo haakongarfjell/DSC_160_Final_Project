@@ -1,14 +1,15 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-  
-    let svgWidth = 500;
-    let svgHeight = 300;
-    let carSpeed = 100;
+
+    let svgWidth = 3500;
+    let svgHeight = 500;
+    let carSpeed = 8000;
+    let textCarSpeed = 0;
     let carMass = 50;
 
-    // Define variables for car dimensions and positions
-    let carTopX = 70;
+     // Define variables for car dimensions and positions
+     let carTopX = 70;
     let carTopY = 10;
     let carTopWidth = 220;
     let carTopHeight = 130;
@@ -29,7 +30,7 @@
     let orangeLightY = carTopY + carTopHeight / 2;
     let groundY = 180;
     let groundLineX2 = carBodyWidth;
-    let polygonX = carTopX + carTopWidth / 2 + 10;
+    let polygonX = carTopX + carTopWidth / 2 + 10;  
 
     function plotData() {
         const svg = d3.select('svg')
@@ -39,21 +40,11 @@
         // Remove old plot before drawing new one
         svg.selectAll('*').remove();
 
-        // Define arrow marker
-        svg.append('defs').append('marker')
-            .attr('id', 'arrow')
-            .attr('viewBox', '0 0 10 10')
-            .attr('refX', 8)
-            .attr('refY', 5)
-            .attr('markerWidth', 6)
-            .attr('markerHeight', 6)
-            .attr('orient', 'auto')
-            .append('path')
-            .attr('d', 'M 0 0 L 10 5 L 0 10 z')
-            .attr('fill', 'black');
+        // Car body
+        const car = svg.append('g')
+            .attr('id', 'car');
 
-        // Car top
-        svg.append('rect')
+        car.append('rect')
             .attr('x', carTopX)
             .attr('y', carTopY)
             .attr('width', carTopWidth)
@@ -64,7 +55,7 @@
             .attr('stroke-width', 10);
 
         // Car body
-        svg.append('rect')
+        car.append('rect')
             .attr('x', carBodyX)
             .attr('y', carBodyY)
             .attr('width', carBodyWidth)
@@ -72,8 +63,9 @@
             .attr('fill', 'crimson')
             .attr('rx', 30);
 
+
         // Left line
-        svg.append('line')
+        car.append('line')
             .attr('x1', leftLineX)
             .attr('y1', carTopY)
             .attr('x2', leftLineX)
@@ -82,7 +74,7 @@
             .attr('stroke-width', 10);
 
         // Right line
-        svg.append('line')
+        car.append('line')
             .attr('x1', rightLineX)
             .attr('y1', carTopY + 5)
             .attr('x2', rightLineX)
@@ -91,16 +83,16 @@
             .attr('stroke-width', 10);
 
         // Right line
-        svg.append('line')
+        car.append('line')
             .attr('x1', leftLineX-70)
             .attr('y1', carTopY + 5)
             .attr('x2', leftLineX-70)
             .attr('y2', carBodyY)
             .attr('stroke', 'crimson')
-            .attr('stroke-width', 10);
+            .attr('stroke-width', 10);    
 
-        // Left bumper
-        svg.append('rect')
+         // Left bumper
+         car.append('rect')
             .attr('x', leftBumperX)
             .attr('y', carBodyY + 40)
             .attr('width', 40)
@@ -109,7 +101,7 @@
             .attr('rx', 10);
 
         // Right bumper
-        svg.append('rect')
+        car.append('rect')
             .attr('x', rightBumperX + 25)
             .attr('y', carBodyY + 40)
             .attr('width', 40)
@@ -118,7 +110,7 @@
             .attr('rx', 10);
 
         // Left wheel
-        svg.append('g')
+        car.append('g')
             .attr('transform', `translate(${leftWheelX}, ${wheelY})`)
             .append('circle')
             .attr('r', '40px')
@@ -127,7 +119,7 @@
             .attr('stroke-width', 7);
 
         // Right wheel
-        svg.append('g')
+        car.append('g')
             .attr('transform', `translate(${rightWheelX}, ${wheelY})`)
             .append('circle')
             .attr('r', '40px')
@@ -136,95 +128,55 @@
             .attr('stroke-width', 7);
 
         // Left wheel
-        svg.append('g')
+        car.append('g')
             .attr('transform', `translate(${leftWheelX}, ${wheelY})`)
             .append('circle')
             .attr('r', '15px')
             .attr('fill', '#555');
 
         // Left wheel
-        svg.append('g')
+        car.append('g')
             .attr('transform', `translate(${rightWheelX}, ${wheelY})`)
             .append('circle')
             .attr('r', '15px')
             .attr('fill', '#555');
 
         // Headlights
-        svg.append('g')
+        car.append('g')
             .attr('transform', `translate(${goldLightX}, ${goldLightY})`)
             .append('circle')
             .attr('r', '15px')
-            .attr('fill', 'gold');
+            .attr('fill', 'gold');    
 
-
-        // Friction force line with arrow
-        svg.append('line')
-            .attr('x1', rightWheelX)
+        // Road
+        car.append('line')
+            .attr('x1',-svgWidth)
             .attr('y1', groundY)
-            .attr('x2', rightWheelX - carMass)
+            .attr('x2', groundLineX2 + svgWidth)
             .attr('y2', groundY)
             .attr('stroke', 'black')
-            .attr('stroke-width', 3)
-            .attr('marker-end', 'url(#arrow)');
+            .attr('stroke-width', 10);
 
-        // Text under the arrow
+            // Set speed text
         svg.append('text')
-            .attr('x', rightWheelX)
-            .attr('y', groundY + 20)
-            .text('Ground Friction Force')
-            .style('text-anchor', 'middle')
-            .style('font-size', '14px')
-            .style('fill', 'black')
-            .style('font-weight', 'bold');
+            .attr('x', 0)
+            .attr('y', 240)
+            .attr('fill', 'black')
+            .text('Set speed: 100')
+            .attr('font-size', 60);
 
-         // Engine force line with arrow
-        svg.append('line')
-            .attr('x1', rightBumperX+50)
-            .attr('y1', carBodyY + 50)
-            .attr('x2', rightBumperX + 130)
-            .attr('y2', carBodyY + 50)
-            .attr('stroke', 'black')
-            .attr('stroke-width', 3)
-            .attr('marker-end', 'url(#arrow)');
-
-        // Text under the arrow
-        svg.append('text')
-            .attr('x', rightBumperX+100)
-            .attr('y', carBodyY + 80)
-            .text('Engine Force')
-            .style('text-anchor', 'middle')
-            .style('font-size', '14px')
-            .style('fill', 'black')
-            .style('font-weight', 'bold');   
-
-        // Air Recistiance force line with arrow
-        svg.append('line')
-            .attr('x1', rightBumperX + carSpeed)
-            .attr('y1', carBodyY-10)
-            .attr('x2', rightBumperX)
-            .attr('y2', carBodyY - 10) 
-            .attr('stroke', 'black')
-            .attr('stroke-width', 3)
-            .attr('marker-end', 'url(#arrow)');
-
-        // Text under the arrow
-        svg.append('text')
-            .attr('x', rightBumperX + 60)
-            .attr('y', carBodyY - 30)
-            .text('Air Resistance  Force')
-            .style('text-anchor', 'middle')
-            .style('font-size', '14px')
-            .style('fill', 'black')
-            .style('font-weight', 'bold');  
+        moveCar(car);
     }
 
-    function updateCarMass(event) {
-        carMass = +event.target.value;
-        plotData();
-    }
-    function updateCarSpeed(event) {
-        carSpeed = +event.target.value;
-        plotData();
+    function moveCar(car) {
+
+        car.transition()
+            .duration(carSpeed)
+            .attr('transform', 'translate(' + (svgWidth) + ',0)')
+            .on('end', function() {
+                d3.select(this).attr('transform', 'translate(-' + carBodyWidth + ',0)');
+                moveCar(car);
+            });
     }
 
     onMount(() => {
@@ -232,75 +184,13 @@
     });
 </script>
 
-<style>
-    /* Slider Styles */
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 200px;
-      height: 10px;
-      background: #d3d3d3;
-      outline: none;
-      opacity: 0.7;
-      -webkit-transition: .2s;
-      transition: opacity .2s;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-  
-    input[type="range"]:hover {
-      opacity: 1;
-    }
-  
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      background: #4CAF50;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-  
-    input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      background: #4CAF50;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-  
-    /* Label Styles */
-    label {
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      color: #333;
-    }
-  
-      #plot {
-      margin: auto; /* Center the plot */
-      width: 800px; /* Adjust width */
-      height: 500px; /* Adjust height */
-      }
-  </style>
-  
-<div style="text-align: center; margin-top: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 10px;">
-    <h1>The Physical Car Model</h1>
-    <p>This is a block diagram representation of how the PID controller works. Move the mouse over the blocks to explore.</p>
-</div>  
-  
-<!-- SVG container -->
-<div style="text-align: center; margin-top: 20px; padding: 20px;"> 
-    <svg></svg>
+
+<div style="text-align: center; margin-top: 200px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+    <h1>What happends inside a Cruise Control?</h1>
+    <p>What is inside tha black box that makes a cruise controller work?</p>
 </div>
 
-<!-- Slider for adjusting the mass -->
-<div style="text-align: center; margin-top: 20px;">
-    <label for="carMass">Car Mass:</label>
-    <input type="range" id="carMass" name="carMass" min="10" max="100" bind:value={carMass} on:input={updateCarMass}>
-    <span>{carMass}</span>
-    <br>
-    <label for="carSpeed">Car Speed:</label>
-    <input type="range" id="carSpeed" name="carSpeed" min="10" max="100" bind:value={carSpeed} on:input={updateCarSpeed}>
-    <span>{carSpeed}</span>
+<!-- SVG container -->
+<div style="text-align: center; margin-top: 400px; padding: 20px;">
+    <svg></svg>
 </div>
