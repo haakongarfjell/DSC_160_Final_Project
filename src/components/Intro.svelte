@@ -2,14 +2,14 @@
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
 
-    let svgWidth = 3500;
+    let svgWidth = 1800; //3500
     let svgHeight = 500;
     let carSpeed = 8000;
     let textCarSpeed = 0;
     let carMass = 50;
 
      // Define variables for car dimensions and positions
-     let carTopX = 70;
+    let carTopX = 70;
     let carTopY = 10;
     let carTopWidth = 220;
     let carTopHeight = 130;
@@ -186,11 +186,11 @@
 
 
 <div style="text-align: center; margin-top: 200px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
-    <h1>What happends inside a Cruise Control?</h1>
-    <p>What is inside tha black box that makes a cruise controller work?</p>
+    <h1>What happends inside a cruise control system?</h1>
+    <p>An interactive visualization of the PID-controller</p>
 </div>
 
-<!-- SVG container -->
-<div style="text-align: center; margin-top: 400px; padding: 20px;">
+<div style="text-align: center; margin-top: 100px; padding: 0px;">
     <svg></svg>
 </div>
+<!-- SVG container -->

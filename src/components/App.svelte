@@ -1,12 +1,12 @@
 
 <script>
+  import Page6 from './Intro.svelte';
   import Home from './Home.svelte';
   import Page1 from './Page1.svelte';
   import Page2 from './Page2.svelte';
   import Page3 from './Page3.svelte';
   import Page4 from './Page4.svelte';
   import Page5 from './Page5.svelte';
-  import Page6 from './Page6.svelte';
 
   let currentPage = 'home';
 
@@ -16,23 +16,23 @@
   };
 
   const goToPreviousPage = () => {
-    if (currentPage === 'home') return; 
-    else if (currentPage === 'page1') currentPage = 'home'; 
-    else if (currentPage === 'page2') currentPage = 'page1'; 
-    else if (currentPage === 'page3') currentPage = 'page2';
-    else if (currentPage === 'page4') currentPage = 'page3';
-    else if (currentPage === 'page5') currentPage = 'page4';
-    else if (currentPage === 'page6') currentPage = 'page5';
+    if (currentPage == 'intro') return;
+    else if (currentPage == 'home') currentPage = 'intro';
+    else if (currentPage == 'page1') currentPage = 'home';
+    else if (currentPage == 'page2') currentPage = 'page1';
+    else if (currentPage == 'page3') currentPage = 'page2';
+    else if (currentPage == 'page4') currentPage = 'page3';
+    else if (currentPage == 'page5') currentPage = 'page4';
   };
 
   const goToNextPage = () => {
-    if (currentPage === 'home') currentPage = 'page1';
-    else if (currentPage === 'page1') currentPage = 'page2'; 
-    else if (currentPage === 'page2') currentPage = 'page3'; 
-    else if (currentPage === 'page3') currentPage = 'page4'; 
-    else if (currentPage === 'page4') currentPage = 'page5';
-    else if (currentPage === 'page5') currentPage = 'page6';
-    else if (currentPage === 'page6') return; 
+    if (currentPage == 'intro') currentPage = 'home';
+    else if (currentPage == 'home') currentPage = 'page1';
+    else if (currentPage == 'page1') currentPage = 'page2';
+    else if (currentPage == 'page2') currentPage = 'page3';
+    else if (currentPage == 'page3') currentPage = 'page4';
+    else if (currentPage == 'page4') currentPage = 'page5';
+    else if (currentPage == 'page5') return;
   };
 </script>
 
@@ -117,13 +117,13 @@
 
 <nav>
   <ul>
-    <li><a href="#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Home</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='intro'} on:click|preventDefault={() => navigate('intro')}>Home</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='home'} on:click|preventDefault={() => navigate('home')}>Introduction</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page1'} on:click|preventDefault={() => navigate('page1')}>System model</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page2'} on:click|preventDefault={() => navigate('page2')}>Block diagram model</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>P-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>PI-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>PID-controller</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page6'} on:click|preventDefault={() => navigate('page6')}>Page 6</a></li>
   </ul>
 </nav>
 
@@ -139,7 +139,7 @@
   <Page4 />
 {:else if currentPage === 'page5'}
   <Page5 />
-{:else if currentPage === 'page6'}
+{:else if currentPage === 'intro'}
   <Page6 />
 {:else}
   <p>Page not found</p>

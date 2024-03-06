@@ -226,7 +226,7 @@
     
 <div style="text-align: center;">
     <div>
-        <h1>How does a PID controller work?</h1>
+        <h1>What is the PID-controller?</h1>
         <p1>The proportional-integral-derivative controller (PID controller) is a widely used control system for industrial processes.</p1><br>
         <p1>It is a feedback control system that continuously calculates an error value as the difference between a desired setpoint and a measured process variable.</p1><br>
         <p1>This article will provide an explanation of how we can implement a PID-controller as a cruise control system for a car in order to make the car automatically drive at a desired velocity.</p1><br>
