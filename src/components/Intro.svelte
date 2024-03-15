@@ -186,7 +186,7 @@
 
 
 <div style="text-align: center; margin-top: 200px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
-    <h1>What happens inside a cruise control system?</h1>
+    <h1>What is the magic of a cruise controller?</h1>
     <p>An interactive visualization of the PID-controller</p>
 </div>
 
