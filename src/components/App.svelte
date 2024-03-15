@@ -7,6 +7,7 @@
   import Page3 from './Page3.svelte';
   import Page4 from './Page4.svelte';
   import Page5 from './Page5.svelte';
+  import Page6 from './Page6.svelte';
 
   let currentPage = 'intro';
 
@@ -23,6 +24,7 @@
     else if (currentPage == 'page3') currentPage = 'page2';
     else if (currentPage == 'page4') currentPage = 'page3';
     else if (currentPage == 'page5') currentPage = 'page4';
+    else if (currentPage == 'page6') currentPage = 'page5';
   };
 
   const goToNextPage = () => {
@@ -32,7 +34,8 @@
     else if (currentPage == 'page2') currentPage = 'page3';
     else if (currentPage == 'page3') currentPage = 'page4';
     else if (currentPage == 'page4') currentPage = 'page5';
-    else if (currentPage == 'page5') return;
+    else if (currentPage == 'page5') currentPage = 'page6';
+    else if (currentPage == 'page6') return;
   };
 </script>
 
@@ -124,6 +127,7 @@
     <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>P-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>PI-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>PID-controller</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page6')}>Takeaways</a></li>
   </ul>
 </nav>
 
@@ -141,6 +145,8 @@
   <Page4 />
 {:else if currentPage === 'page5'}
   <Page5 />
+{:else if currentPage === 'page6'}
+  <Page6 />
 {:else}
   <p>Page not found</p>
 {/if}
