@@ -127,7 +127,7 @@
     <li><a href="#" class="nav-link" class:active={currentPage==='page3'} on:click|preventDefault={() => navigate('page3')}>P-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page4'} on:click|preventDefault={() => navigate('page4')}>PI-controller</a></li>
     <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page5')}>PID-controller</a></li>
-    <li><a href="#" class="nav-link" class:active={currentPage==='page5'} on:click|preventDefault={() => navigate('page6')}>Takeaways</a></li>
+    <li><a href="#" class="nav-link" class:active={currentPage==='page6'} on:click|preventDefault={() => navigate('page6')}>Takeaways</a></li>
   </ul>
 </nav>
 
