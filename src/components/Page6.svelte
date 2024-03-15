@@ -255,7 +255,7 @@
                     <div style="text-align: center;"> 
                         <svg></svg>
                     </div>
-                    <p1>We know now that this can be achieved with a PID controller, which raises the question of what other systems the can PID controller be used for?</p1><br>
+                    <p1>We know now that this can be achieved with a PID controller, which raises the question of what other systems the PID can controller be used for?</p1><br>
                     <h2>Applications</h2>
                     <p>As demonstrated, the PID controller is surprisingly simple. An important takeaway is that the PID controller is applicable to all dynamical systems as long as you can apply an input and measure the output.
                         In this example, we use a simple model to simulate the car dynamics, but in practice you would use a sensor to measure the velocity of the car and apply the input produced by the controller.
