@@ -229,6 +229,30 @@
         simulationData = simulate(initial_velocity, setpoint_velocity, control_on_time, [Kp, Ki, Kd]);
         plotData();
     });
+
+    function setCriticallyDamped() {
+    // Define critical damping values for Kp, Ki, and Kd
+    const criticalKp = 50; // Adjust as needed
+    const criticalKi = 1.7;  // Adjust as needed
+    const criticalKd = 50;  // Adjust as needed
+
+    const crit_initial_velocity = 100;
+    const crit_setpoint_velocity = 50;
+    const crit_control_on_time = 50;
+
+    // Update slider values to critically damped values
+    Kp = criticalKp;
+    Ki = criticalKi;
+    Kd = criticalKd;
+
+    initial_velocity = crit_initial_velocity;
+    setpoint_velocity = crit_setpoint_velocity;
+    control_on_time = crit_control_on_time;
+    
+    // Update simulation parameters
+    updateParameters();
+}
+
 </script>
 
 <style>
@@ -281,48 +305,92 @@
     width: 800px; /* Adjust width */
     height: 500px; /* Adjust height */
     }
+
+    .fancy-button {
+        background-color: rgb(92, 91, 89);
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 50px; /* Round shape */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        transition: background-color 0.3s ease; /* Smooth transition */
+    }
+
+    .fancy-button:hover {
+        background-color: rgb(128, 126, 123);
+        }
 </style>
 
-<div id="plot">
-    <!-- Plot will be rendered here -->
+
+<!-- Make a div divided intro three part-->
+<div style="display: flex; justify-content: space-around;">
+   
+  <!-- Third box -->
+    <div style="flex: 1; text-align: center;">
+     
+  </div>
+  <!-- First box -->
+  <div style="flex: 1; text-align: center;">
+      <div id="plot">
+        <!-- Plot will be rendered here -->
+    </div>
+  </div>
+
+  <!-- Second box -->
+  <div style="flex: 1; text-align: center;">
+    <div style="text-align: center; margin-top: 80px; margin-left: 20%; margin-right: 20%;; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+      <h2>Check Your Solution</h2>
+      <p>Click the button below to set the PID-controller to critically damped values for the given initial velocity = 50 m/s, setpoint velocity = 100 m/s, and control time 50 s.</p>
+      <p>Was it close to your tuning?</p>
+      <button class="fancy-button" on:click={setCriticallyDamped}>Set Critically Damped</button>
+    </div>
+  </div>
+
+
 </div>
 
 <!-- Sliders for adjusting parameters -->
 <div style="text-align: center; margin-top: 20px;">
-    <label for="Ki">Ki:</label>
-    <input type="range" id="Ki" name="Ki" min="0" max="5" step="0.1" bind:value={Ki} on:input={updateParameters}>
-    <span>{Ki}</span>
+  <label for="Ki">Ki:</label>
+  <input type="range" id="Ki" name="Ki" min="0" max="5" step="0.1" bind:value={Ki} on:input={updateParameters}>
+  <span>{Ki}</span>
 
-    <label for="Kp" style="margin-left: 20px;">Kp:</label>
-    <input type="range" id="Kp" name="Kp" min="0" max="50" step="1" bind:value={Kp} on:input={updateParameters}>
-    <span>{Kp}</span>
+  <label for="Kp" style="margin-left: 20px;">Kp:</label>
+  <input type="range" id="Kp" name="Kp" min="0" max="50" step="1" bind:value={Kp} on:input={updateParameters}>
+  <span>{Kp}</span>
 
-    <label for="Kd" style="margin-left: 20px;">Kd:</label>
-    <input type="range" id="Kd" name="Kd" min="0" max="50" step="1" bind:value={Kd} on:input={updateParameters}>
-    <span>{Kd}</span>
+  <label for="Kd" style="margin-left: 20px;">Kd:</label>
+  <input type="range" id="Kd" name="Kd" min="0" max="50" step="1" bind:value={Kd} on:input={updateParameters}>
+  <span>{Kd}</span>
 </div>
+
 
 <div style="text-align: center; margin-top: 20px;">
-    <label for="initial_velocity">Initial Velocity:</label>
-    <input type="range" id="initial_velocity" name="initial_velocity" min="0" max="200" step="1" bind:value={initial_velocity} on:input={updateParameters}>
-    <span>{initial_velocity}</span>
+  <label for="initial_velocity">Initial Velocity:</label>
+  <input type="range" id="initial_velocity" name="initial_velocity" min="0" max="200" step="1" bind:value={initial_velocity} on:input={updateParameters}>
+  <span>{initial_velocity}</span>
 
-    <label for="setpoint_velocity" style="margin-left: 20px;">Set Velocity:</label>
-    <input type="range" id="setpoint_velocity" name="setpoint_velocity" min="0" max="100" step="1" bind:value={setpoint_velocity} on:input={updateParameters}>
-    <span>{setpoint_velocity}</span>
+  <label for="setpoint_velocity" style="margin-left: 20px;">Set Velocity:</label>
+  <input type="range" id="setpoint_velocity" name="setpoint_velocity" min="0" max="100" step="1" bind:value={setpoint_velocity} on:input={updateParameters}>
+  <span>{setpoint_velocity}</span>
 
-    <label for="control_on_time" style="margin-left: 20px;">Cruise Control On:</label>
-    <input type="range" id="control_on_time" name="control_on_time" min="10" max="90" step="1" bind:value={control_on_time} on:input={updateParameters}>
-    <span>{control_on_time}</span>
+  <label for="control_on_time" style="margin-left: 20px;">Cruise Control On:</label>
+  <input type="range" id="control_on_time" name="control_on_time" min="10" max="90" step="1" bind:value={control_on_time} on:input={updateParameters}>
+  <span>{control_on_time}</span>
 </div>
 
-
-
-<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
-  <h1>The complete PID-Controller</h1>
-    <p>Lets experiment with how the PID-controller affects the cruise control model by including the D-term. This gives us a little more flexibility in order to reduce oscillations. Adjust the proportional (Kp), integral (Ki), and derivative (Kd) terms, along with the setpoint velocity and initial velocity when cruise control is activated.</p>
-    <p>Test your control engineer abilities by making the system critically dampened for various conditions of initial velocities and setpoint values! </p>
+<div style="text-align: center; margin-top: 20px; margin-left: 20%; margin-right: 20%; padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+  <h1>The Complete PID-Controller</h1>
+  <p>Lets experiment with how the PID-controller affects the cruise control model by including the D-term. This gives us a little more flexibility in order to reduce oscillations. Adjust the proportional (Kp), integral (Ki), and derivative (Kd) terms, along with the setpoint velocity and initial velocity when cruise control is activated.</p>
+  <p>Test your control engineer abilities by making the system critically dampened for various conditions of initial velocities and setpoint values! </p>
 </div>
+
 
 <p></p><br>
 <p></p><br>

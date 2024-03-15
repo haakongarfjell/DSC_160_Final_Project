@@ -301,7 +301,7 @@
 </div>
 
 <!-- Make a text box for explanations -->
-<div style="text-align: center; margin-top: 20px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
+<div style="text-align: center; margin-top: 60px; margin-left: 500px; margin-right: 500px;  padding: 20px; background-color: #f0f0f0; border: 2px solid #000; border-radius: 10px;">
     <h1>But why do you need a P, I and D term?</h1>
     <p>
         Lets explore what happens if we only include the P-term, in other words what happens when applying a P-controller. The slider above can be used to adjust the value of Kp, the proportional gain of the controller. The blue line represents the velocity of the car over time, while the green line represents the setpoint velocity. The red dashed line indicates the time at which the cruise control is turned on. The black solid line indicates the steady state error at 90 seconds.
